@@ -44,30 +44,37 @@ def predict():
             logger.error("Invalid input: 'features' key is missing.")
             return jsonify({"error": "Invalid input. 'features' key is missing."}), 400
 
-        # Validate and filter features
+        # Extract raw features from input
         input_features = data["features"]
-        filtered_features = {key: input_features[key] for key in selected_feature_names if key in input_features}
 
-        # Check for missing features
-        missing_features = [feature for feature in selected_feature_names if feature not in filtered_features]
-        if missing_features:
-            logger.error(f"Missing required features: {missing_features}")
-            return jsonify({"error": "Missing required features", "missing_features": missing_features}), 400
-
-        # Add missing features with default values
+        # Add missing features with default values (0.0)
         for feature in selected_feature_names:
-            if feature not in filtered_features:
-                filtered_features[feature] = 0.0
+            if feature not in input_features:
+                input_features[feature] = 0.0
 
-        # Convert to DataFrame with correct feature order
-        features_df = pd.DataFrame([filtered_features], columns=selected_feature_names)
+        # Convert input features to a DataFrame
+        all_features_df = pd.DataFrame([input_features])
 
-        # Scale features
-        features_scaled = scaler.transform(features_df)
+        # Scale the features
+        try:
+            scaled_features = scaler.transform(all_features_df)
+        except Exception as e:
+            logger.error(f"Error during feature scaling: {str(e)}")
+            return jsonify({"error": "Error during feature scaling", "details": str(e)}), 500
+
+        # Convert scaled features to a DataFrame
+        scaled_features_df = pd.DataFrame(scaled_features, columns=all_features_df.columns)
+
+        # Filter scaled features based on the selected feature names
+        filtered_features_df = scaled_features_df[selected_feature_names]
 
         # Make prediction
-        prediction = model.predict(features_scaled)[0]
-        prediction_proba = model.predict_proba(features_scaled)[0]
+        try:
+            prediction = model.predict(filtered_features_df)[0]
+            prediction_proba = model.predict_proba(filtered_features_df)[0]
+        except Exception as e:
+            logger.error(f"Error during model prediction: {str(e)}")
+            return jsonify({"error": "Error during model prediction", "details": str(e)}), 500
 
         # Response
         response = {
