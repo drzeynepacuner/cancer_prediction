@@ -1,0 +1,28 @@
+# Core libraries
+numpy
+pandas
+scikit-learn
+
+# Model explainability
+shap
+
+# Imbalanced data handling
+imbalanced-learn
+
+# Logging
+loguru
+
+# Machine learning models
+xgboost
+joblib
+
+# API and Web Framework
+Flask
+
+# Testing
+pytest
+pytest-flask
+
+# Optional (development tools)
+jupyterlab
+matplotlib
