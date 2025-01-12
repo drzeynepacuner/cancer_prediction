@@ -1,8 +1,14 @@
+import os
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 import joblib
 from loguru import logger
 
+# Get the directory of the current script
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Set the base directory to the parent directory (../)
+BASE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
 
 def select_top_features(X, y, feature_names, top_percent=0.75):
     logger.info(f"Selecting top {top_percent * 100}% features...")

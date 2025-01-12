@@ -4,8 +4,22 @@ import joblib
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, classification_report
 
+# Get the directory of the current script
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def load_test_data(test_data_dir="data/processed"):
+# Set the base directory to the parent directory (../)
+BASE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
+
+# Define default paths relative to BASE_DIR
+LOGS_DIR = os.path.join(BASE_DIR, "logs")
+MODELS_DIR = os.path.join(BASE_DIR, "data", "models")
+PROCESSED_DATA_DIR = os.path.join(BASE_DIR, "data", "processed")
+RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "breast_cancer_data.csv")
+FEATURE_PATH = os.path.join(BASE_DIR, "data", "models", "feature_names.pkl")
+SCALER_PATH = os.path.join(BASE_DIR, "data", "models", "scaler.pkl")
+SELECTED_FEATURES_PATH = os.path.join(BASE_DIR, "data", "models", "selected_feature_names.pkl")
+
+def load_test_data(test_data_dir=PROCESSED_DATA_DIR):
     """
     Load test data from JSON files.
 
@@ -18,10 +32,10 @@ def load_test_data(test_data_dir="data/processed"):
         feature_names (list): List of selected feature names.
     """
     try:
-        with open(os.path.join("/mnt/c/Users/zeyac/PycharmProjects/cancerApi/data/processed", "X_test.json"), "r") as f:
+        with open(os.path.join(PROCESSED_DATA_DIR, "X_test.json"), "r") as f:
             X_test_dict = json.load(f)
 
-        with open(os.path.join("/mnt/c/Users/zeyac/PycharmProjects/cancerApi/data/processed", "y_test.json"), "r") as f:
+        with open(os.path.join(PROCESSED_DATA_DIR, "y_test.json"), "r") as f:
             y_test = np.array(json.load(f))
 
         feature_names = list(X_test_dict.keys())
@@ -33,7 +47,7 @@ def load_test_data(test_data_dir="data/processed"):
         raise Exception(f"Error loading test data: {str(e)}")
 
 
-def load_model(model_path="/mnt/c/Users/zeyac/PycharmProjects/cancerApi/data/models/best_model.pkl"):
+def load_model(model_path=os.path.join(MODELS_DIR, "best_model.pkl")):
     """
     Load the trained model from a pickle file.
 

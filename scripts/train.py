@@ -1,5 +1,7 @@
 import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from loguru import logger
 from src.data_preprocessing import load_and_preprocess_data, resample_data
 from src.feature_selection import select_top_features
@@ -8,20 +10,33 @@ from src.explainability import explain_model
 import joblib
 import json
 import logging
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 
 
+# Get the directory of the current script
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Ensure the logs folder exists
-os.makedirs("logs", exist_ok=True)
-# Ensure the directory exists
-os.makedirs("data/models", exist_ok=True)
+# Set the base directory to the parent directory (../)
+BASE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
 
+# Validate BASE_DIR
+if not os.path.isdir(BASE_DIR):
+    raise ValueError(f"Invalid BASE_DIR: {BASE_DIR}")
+
+logger.info(f"Base directory set to: {BASE_DIR}")
+
+# Define default paths relative to BASE_DIR
+LOGS_DIR = os.path.join(BASE_DIR, "logs")
+MODELS_DIR = os.path.join(BASE_DIR, "data", "models")
+PROCESSED_DATA_DIR = os.path.join(BASE_DIR, "data", "processed")
+RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "breast_cancer_data.csv")
+
+# Ensure necessary directories exist
+os.makedirs(LOGS_DIR, exist_ok=True)
+os.makedirs(MODELS_DIR, exist_ok=True)
+os.makedirs(PROCESSED_DATA_DIR, exist_ok=True)
 # Configure logger
 logger.add(
     "logs/training.log",  # Save training logs in logs/training.log

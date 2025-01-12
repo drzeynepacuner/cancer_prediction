@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -5,14 +6,21 @@ from imblearn.combine import SMOTETomek
 import joblib
 from loguru import logger
 
+# Get the directory of the current script
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def load_and_preprocess_data(file_path):
+# Set the base directory to the parent directory (../)
+BASE_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
+
+RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "breast_cancer_data.csv")
+
+
+def load_and_preprocess_data(RAW_DATA_PATH):
     logger.info("Loading and preprocessing data...")
-    df = pd.read_csv(file_path)
+    df = pd.read_csv(RAW_DATA_PATH)
     df.drop(columns=['Unnamed: 32'], inplace=True, errors='ignore')
 
     X = df.drop(columns=['id', 'diagnosis'])
-    X = df.sort_values()
     y = df['diagnosis'].map({'M': 1, 'B': 0})  # Encode target
     X = X[sorted(X.columns)]  # Alphabetically sort features
 
