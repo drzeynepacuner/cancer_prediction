@@ -10,3 +10,4 @@ flask
 imbalanced-learn==0.7.0
 shap
 matplotlib
+pytest
