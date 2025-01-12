@@ -1,8 +1,11 @@
 import pytest
 import numpy as np
+import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.feature_selection import select_top_features
 from src.model_training import evaluate_and_tune_models
 
