@@ -7,7 +7,7 @@ xgboost
 numpy
 pandas
 flask
-imbalanced-learn==0.7.0
+imbalanced-learn
 shap
 matplotlib
 pytest
