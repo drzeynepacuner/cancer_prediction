@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask
-from api.app import app  # Import your Flask app
+import main  # Import your Flask app
 
 @pytest.fixture
 def client():
