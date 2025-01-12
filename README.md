@@ -114,7 +114,7 @@ All dependencies can be installed using the `requirements.txt` file.
 3. **Optional: Run the API for Real-Time Predictions**
 
    ```bash
-   python api/app.py
+   python main.py
    ```
 
    Access the API at `http://localhost:5000`.
