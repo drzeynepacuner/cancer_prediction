@@ -2,7 +2,7 @@ joblib
 xgboost
 numpy
 loguru
-scikit-learn
+scikit-learn == 1.5.2
 xgboost
 numpy
 pandas
